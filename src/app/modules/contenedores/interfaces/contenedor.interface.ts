@@ -54,6 +54,7 @@ export interface Contenedor extends BaseContenedor, BaseUsuarioAcceso, BasePlanU
   acceso_seguimiento?: boolean;
   acceso_whatsapp?: boolean;
   acceso_whatsapp_notificaciones?: boolean;
+  acceso_satrack?: boolean;
 }
 
 export interface ContenedorDetalle extends BaseContenedor, BaseUsuarioAcceso {
@@ -62,6 +63,7 @@ export interface ContenedorDetalle extends BaseContenedor, BaseUsuarioAcceso {
   acceso_seguimiento: boolean;
   acceso_whatsapp: boolean;
   acceso_whatsapp_notificaciones: boolean;
+  acceso_satrack: boolean;
 }
 
 export interface ContenedorLista extends Contenedor {}

@@ -68,6 +68,11 @@ export const obtenerAccesoSeguimiento = createSelector(
   (Contenedor) => !!Contenedor?.acceso_seguimiento
 );
 
+export const obtenerAccesoSatrack = createSelector(
+  Contenedor,
+  (Contenedor) => !!Contenedor?.acceso_satrack
+);
+
 export const obtenerAccesoWhatsappNotificaciones = createSelector(
   Contenedor,
   (Contenedor) => !!Contenedor?.acceso_whatsapp_notificaciones

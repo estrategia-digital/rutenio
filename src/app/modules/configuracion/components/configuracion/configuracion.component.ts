@@ -20,6 +20,9 @@ import {
 import {
   obtenerConfiguracionInformacion,
 } from '../../../../redux/selectors/configuracion.selectors';
+import {
+  obtenerAccesoSatrack,
+} from '../../../../redux/selectors/contenedor.selector';
 import { EmpresaService } from '../../../empresa/servicios/empresa.service';
 import { AlertaService } from '../../../../common/services/alerta.service';
 import { PermisoPorDirective } from '../../../../common/directivas/permiso-por.directive';
@@ -49,6 +52,7 @@ export default class ConfiguracionComponent extends General implements OnDestroy
   private _franjaService = inject(FranjaService);
   private destroy$ = new Subject<void>();
   obtenerEmpresaImagen$ = this.store.select(obtenerEmpresaImagen);
+  accesoSatrack$ = this.store.select(obtenerAccesoSatrack);
   mostrarModalConfirmacion = false;
   modalTitulo = '';
   modalDescripcion = '';

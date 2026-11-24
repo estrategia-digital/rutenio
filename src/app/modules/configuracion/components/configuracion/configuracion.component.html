@@ -233,7 +233,7 @@
           </div>
         </section>
 
-        <section>
+        <section *ngIf="accesoSatrack$ | async">
           <h2 class="text-base font-semibold text-gray-900 mb-3">Ubicación GPS (Satrack)</h2>
           <div class="bg-blue-50 border border-blue-200 rounded px-3 py-2">
             <p class="text-xs text-blue-800">

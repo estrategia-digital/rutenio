@@ -184,6 +184,7 @@ export default class ContenedorListaComponent
             acceso_seguimiento: respuesta.acceso_seguimiento,
             acceso_whatsapp: respuesta.acceso_whatsapp,
             acceso_whatsapp_notificaciones: respuesta.acceso_whatsapp_notificaciones,
+            acceso_satrack: respuesta.acceso_satrack,
           };
           this.store.dispatch(ContenedorActionInit({ contenedor }));
 

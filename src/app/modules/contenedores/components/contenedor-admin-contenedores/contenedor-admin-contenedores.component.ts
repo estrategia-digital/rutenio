@@ -29,6 +29,7 @@ interface ContenedorGlobal {
   acceso_whatsapp: boolean;
   acceso_whatsapp_notificaciones: boolean;
   acceso_seguimiento: boolean;
+  acceso_satrack: boolean;
   whatsapp_phone_number_id: string | null;
   whatsapp_display: string | null;
   whatsapp_estado: string | null;
@@ -53,6 +54,7 @@ export default class ContenedorAdminContenedoresComponent implements OnInit {
   busqueda = '';
   accediendoId = signal<number | null>(null);
   seguimientoId = signal<number | null>(null);
+  satrackId = signal<number | null>(null);
 
   private get headers(): HttpHeaders {
     const token = getCookie('admin_token');
@@ -121,6 +123,28 @@ export default class ContenedorAdminContenedoresComponent implements OnInit {
       });
   }
 
+  toggleSatrack(c: ContenedorGlobal) {
+    if (this.satrackId()) return;
+    this.satrackId.set(c.id);
+    this.http
+      .post<{ mensaje: string; acceso_satrack: boolean }>(
+        `${environment.url_api}/contenedor/contenedor/toggle-satrack/`,
+        { id: c.id },
+        { headers: this.headers }
+      )
+      .subscribe({
+        next: (resp) => {
+          this.contenedores.update((lista) =>
+            lista.map((x) =>
+              x.id === c.id ? { ...x, acceso_satrack: resp.acceso_satrack } : x
+            )
+          );
+          this.satrackId.set(null);
+        },
+        error: () => this.satrackId.set(null),
+      });
+  }
+
   acceder(c: ContenedorGlobal) {
     if (this.accediendoId()) return;
     this.accediendoId.set(c.id);
@@ -151,6 +175,7 @@ export default class ContenedorAdminContenedoresComponent implements OnInit {
                 acceso_seguimiento: resp.acceso_seguimiento,
                 acceso_whatsapp: resp.acceso_whatsapp,
                 acceso_whatsapp_notificaciones: resp.acceso_whatsapp_notificaciones,
+                acceso_satrack: resp.acceso_satrack,
               } as any,
             })
           );

@@ -27,6 +27,7 @@ import {
   takeUntil,
 } from 'rxjs';
 import { obtenerConfiguracionInformacion } from '../../../../redux/selectors/configuracion.selectors';
+import { obtenerAccesoSatrack } from '../../../../redux/selectors/contenedor.selector';
 import { Alerta } from '../../../../interfaces/alerta/alerta.interface';
 import { KTModal } from '../../../../../metronic/core';
 import { General } from '../../../../common/clases/general';
@@ -134,6 +135,7 @@ export default class TraficoListaComponent
   private _filtroBaseService = inject(FiltroBaseService);
   public mapaTheme = inject(MapaThemeService);
   public TRAFICO_LISTA_FILTERS = TRAFICO_LISTA_FILTERS;
+  public accesoSatrack$ = this.store.select(obtenerAccesoSatrack);
 
   public visitaSeleccionada: Visita;
   public despachoSeleccionado: Despacho;

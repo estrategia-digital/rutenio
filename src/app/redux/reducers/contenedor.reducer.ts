@@ -28,6 +28,7 @@ let estadoInicializado: Contenedor = {
   acceso_seguimiento: false,
   acceso_whatsapp: false,
   acceso_whatsapp_notificaciones: false,
+  acceso_satrack: false,
   permisos: null,
 };
 
