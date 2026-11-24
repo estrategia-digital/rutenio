@@ -13,6 +13,7 @@ import {
   MapInfoWindow,
   MapMarker,
 } from '@angular/google-maps';
+import { RouterLink } from '@angular/router';
 import {
   filter,
   debounceTime,
@@ -106,6 +107,7 @@ const MAX_WAYPOINTS = 23;
     DespachoTerminacionComponent,
     PaginadorComponent,
     FiltroComponent,
+    RouterLink,
   ],
   templateUrl: './trafico-lista.component.html',
   styleUrl: './trafico-lista.component.css',
