@@ -99,6 +99,10 @@ export default [
       {
         path: 'whatsapp',
         loadComponent: () => import('../modules/mensajeria/components/whatsapp-conexion/whatsapp-conexion.component')
+      },
+      {
+        path: 'satrack',
+        loadComponent: () => import('../modules/satrack/components/satrack-conexion/satrack-conexion.component')
       }
     ]
   },

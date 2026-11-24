@@ -1,0 +1,120 @@
+<div class="p-6 max-w-3xl mx-auto">
+
+  <div class="mb-6">
+    <h1 class="text-[22px] font-semibold text-gray-900 tracking-tight">Satrack — Ubicación GPS</h1>
+    <p class="text-sm text-gray-500 mt-1">
+      Conectá la cuenta de Satrack para ver la ubicación en vivo de los vehículos en ruta. Cada placa debe coincidir con el código de servicio en Satrack.
+    </p>
+  </div>
+
+  <div *ngIf="cargando" class="bg-white dark:bg-gray-100 border border-gray-200 dark:border-gray-200 rounded-xl p-8 text-center">
+    <div class="inline-flex gap-1.5">
+      <span class="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></span>
+      <span class="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse" style="animation-delay:.15s"></span>
+      <span class="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse" style="animation-delay:.3s"></span>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando" class="space-y-4">
+
+    <div *ngIf="conexion" class="bg-white dark:bg-gray-100 border border-gray-200 dark:border-gray-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="text-[17px] font-semibold text-gray-900 tracking-tight">Estado de la conexión</h2>
+            <span *ngIf="conexion.estado === 'activo'"
+                  class="inline-flex items-center gap-1 text-[11px] font-medium text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/30 rounded-full px-2 py-0.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500"></span>
+              Conectado
+            </span>
+            <span *ngIf="conexion.estado === 'pendiente'"
+                  class="inline-flex items-center gap-1 text-[11px] font-medium text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-100 dark:border-yellow-500/30 rounded-full px-2 py-0.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+              Pendiente
+            </span>
+            <span *ngIf="conexion.estado === 'error'"
+                  class="inline-flex items-center gap-1 text-[11px] font-medium text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/30 rounded-full px-2 py-0.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500"></span>
+              Error
+            </span>
+          </div>
+          <p class="text-sm text-gray-500 mt-1">
+            Cliente <span class="font-medium text-gray-700">{{ conexion.client_id }}</span>
+            <span *ngIf="conexion.fecha_ultima_consulta"> · última consulta {{ conexion.fecha_ultima_consulta | date:'short' }}</span>
+          </p>
+        </div>
+
+        <button type="button" (click)="probar()" [disabled]="probando"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium text-gray-700 bg-white dark:bg-gray-100 border border-gray-200 dark:border-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-coal-200 transition
+                       disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg *ngIf="!probando" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+          <svg *ngIf="probando" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+            <path d="M21 12a9 9 0 1 1-6.22-8.56"/>
+          </svg>
+          {{ probando ? 'Probando...' : 'Probar conexión' }}
+        </button>
+      </div>
+
+      <div *ngIf="conexion.error_mensaje"
+           class="mt-4 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 p-3 text-[12px] text-red-700 dark:text-red-400">
+        {{ conexion.error_mensaje }}
+      </div>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()"
+          class="bg-white dark:bg-gray-100 border border-gray-200 dark:border-gray-200 rounded-2xl p-6 shadow-sm space-y-5">
+      <h2 class="text-[17px] font-semibold text-gray-900 tracking-tight">
+        {{ conexion ? 'Actualizar credenciales' : 'Credenciales de Satrack' }}
+      </h2>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Client ID</label>
+        <input type="text" formControlName="client_id" autocomplete="off"
+               class="w-full rounded-lg border border-gray-200 dark:border-gray-200 bg-white dark:bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="Id de cliente de integración" />
+        <p *ngIf="formulario.controls.client_id.touched && formulario.controls.client_id.invalid"
+           class="text-xs text-red-600 mt-1">El Client ID es requerido.</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Client Secret</label>
+        <input type="password" formControlName="client_secret" autocomplete="new-password"
+               class="w-full rounded-lg border border-gray-200 dark:border-gray-200 bg-white dark:bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               [placeholder]="conexion ? 'Guardado · ingresá de nuevo para cambiarlo' : 'Clave secreta de la aplicación'" />
+        <p *ngIf="formulario.controls.client_secret.touched && formulario.controls.client_secret.invalid"
+           class="text-xs text-red-600 mt-1">El Client Secret es requerido.</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Grant type</label>
+        <input type="text" formControlName="grant_type" autocomplete="off"
+               class="w-full rounded-lg border border-gray-200 dark:border-gray-200 bg-white dark:bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="client_credentials" />
+        <p class="text-xs text-gray-500 mt-1">Tipo de concesión que entrega Satrack. Si no te indicaron otro, dejá <span class="font-medium">client_credentials</span>.</p>
+      </div>
+
+      <div class="flex justify-end">
+        <button type="submit" [disabled]="guardando"
+                class="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition
+                       disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="guardando" class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+          {{ guardando ? 'Guardando…' : (conexion ? 'Actualizar y verificar' : 'Guardar y verificar') }}
+        </button>
+      </div>
+    </form>
+
+    <div class="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/30 rounded-xl p-4 flex items-start gap-3">
+      <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+      </svg>
+      <div class="text-sm text-blue-900 dark:text-blue-200">
+        <p class="font-medium">Cómo obtener las credenciales</p>
+        <p class="text-xs text-blue-700 dark:text-blue-300 mt-1">
+          Solicitá a Satrack el <span class="font-semibold">client_id</span>, el <span class="font-semibold">client_secret</span> y el <span class="font-semibold">grant_type</span> de integración. La ubicación en vivo usa la última posición reportada por cada placa.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
